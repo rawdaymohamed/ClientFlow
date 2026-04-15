@@ -21,18 +21,28 @@ const Login = () => {
             <input
               type="email"
               placeholder="Enter your email"
-              {...register("email")}
+              {...register("email", { required: "Email is required" })}
               className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-gray-400"
             />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.email.message}
+              </p>
+            )}
           </div>
           <div>
             <label className="block mb-1 text-sm font-medium">Password</label>
             <input
               type="password"
               placeholder="Enter your password"
-              {...register("password")}
+              {...register("password", { required: "Password is required" })}
               className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-gray-400"
             />
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </div>
           <button
             type="submit"
