@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import User from "../models/User.js";
 import generateToken from "../utils/generateToken.js";
 import { authCookieOptions } from "../utils/cookieOptions.js";
+import { COOKIE_NAME } from "../constants/index.js";
 
 export const registerUser = async (req, res, next) => {
   try {
@@ -26,7 +27,7 @@ export const registerUser = async (req, res, next) => {
 
     const token = generateToken(user._id.toString());
 
-    res.cookie("token", token, authCookieOptions);
+    res.cookie(COOKIE_NAME, token, authCookieOptions);
 
     return res.status(201).json({
       status: "success",
