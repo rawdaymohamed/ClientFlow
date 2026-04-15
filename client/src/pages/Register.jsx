@@ -7,6 +7,7 @@ import { useState } from "react";
 
 const Register = () => {
   const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const {
     register,
     handleSubmit,
@@ -20,8 +21,16 @@ const Register = () => {
     onSuccess: (data) => {
       setSuccessMessage(data.message || "Registration successful");
     },
+    onError: (error) => {
+      setErrorMessage(
+        error.response?.data?.message ||
+          "Registration failed. Please try again.",
+      );
+    },
   });
   const onSubmit = (data) => {
+    setErrorMessage("");
+    setSuccessMessage("");
     registerMutation.mutate(data);
   };
 
@@ -32,6 +41,11 @@ const Register = () => {
         {successMessage && (
           <p className="mb-4 rounded-md bg-green-100 px-3 py-2 text-sm text-green-700">
             {successMessage}
+          </p>
+        )}
+        {errorMessage && (
+          <p className="mb-4 rounded-md bg-red-100 px-3 py-2 text-sm text-red-700">
+            {errorMessage}
           </p>
         )}
         <form
