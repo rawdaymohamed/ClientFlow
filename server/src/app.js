@@ -4,6 +4,9 @@ import morgan from "morgan";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 

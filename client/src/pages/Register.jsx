@@ -17,7 +17,7 @@ const Register = () => {
     mutationFn: registerUser,
   });
   const onSubmit = (data) => {
-    console.log(data);
+    registerMutation.mutate(data);
   };
 
   return (
