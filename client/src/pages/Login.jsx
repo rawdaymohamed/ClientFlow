@@ -25,7 +25,15 @@ const Login = () => {
               className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-gray-400"
             />
           </div>
-
+          <div>
+            <label className="block mb-1 text-sm font-medium">Password</label>
+            <input
+              type="password"
+              placeholder="Enter your password"
+              {...register("password")}
+              className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-gray-400"
+            />
+          </div>
           <button
             type="submit"
             className="w-full rounded-md bg-black px-4 py-2 text-white"
