@@ -2,6 +2,7 @@ import express from "express";
 import validate from "../middlewares/validate.middleware.js";
 import { loginSchema, registerSchema } from "../validators/auth.validator.js";
 import {
+  getCurrentUser,
   loginUser,
   logoutUser,
   protectedRoute,
@@ -15,4 +16,5 @@ router.post("/register", validate(registerSchema), registerUser);
 router.post("/login", validate(loginSchema), loginUser);
 router.post("/logout", logoutUser);
 router.get("/protected", protect, protectedRoute);
+router.get("/me", protect, getCurrentUser);
 export default router;
