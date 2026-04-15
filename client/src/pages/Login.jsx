@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { loginSchema } from "../features/auth/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -6,6 +7,7 @@ import { loginUser } from "../api/authApi";
 import { useState } from "react";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const {
@@ -18,8 +20,9 @@ const Login = () => {
 
   const loginMutation = useMutation({
     mutationFn: loginUser,
-    onSuccess: (data) => {
-      setSuccessMessage(data.message || "Login successful");
+    onSuccess: () => {
+      navigate("/dashboard");
+      setSuccessMessage("Login successful! Redirecting to dashboard...");
       setErrorMessage("");
     },
     onError: (error) => {

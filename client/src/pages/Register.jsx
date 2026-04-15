@@ -4,8 +4,10 @@ import { registerSchema } from "../features/auth/auth.schema";
 import { useMutation } from "@tanstack/react-query";
 import { registerUser } from "../api/authApi";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const {
@@ -20,6 +22,7 @@ const Register = () => {
     mutationFn: registerUser,
     onSuccess: (data) => {
       setSuccessMessage(data.message || "Registration successful");
+      navigate("/dashboard");
     },
     onError: (error) => {
       setErrorMessage(
