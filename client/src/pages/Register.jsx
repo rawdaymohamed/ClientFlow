@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { registerUser } from "../api/authApi";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import FormAlert from "../components/ui/FormAlert";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -38,11 +39,7 @@ const Register = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
         <h1 className="text-2xl font-bold mb-4 text-center">Register</h1>
-        {errorMessage && (
-          <p className="mb-4 rounded-md bg-red-100 px-3 py-2 text-sm text-red-700">
-            {errorMessage}
-          </p>
-        )}
+    <FormAlert message={errorMessage} />
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="space-y-4"
