@@ -42,3 +42,42 @@ export const registerUser = async (req, res, next) => {
     next(error);
   }
 };
+export const loginUser = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email }).select("+password");
+
+    if (!user) {
+      return res.status(401).json({
+        status: "error",
+        message: "Invalid email or password",
+      });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(401).json({
+        status: "error",
+        message: "Invalid email or password",
+      });
+    }
+
+    const token = generateToken(user._id.toString());
+
+    res.cookie(COOKIE_NAME, token, authCookieOptions);
+
+    return res.status(200).json({
+      status: "success",
+      message: "Logged in successfully",
+      data: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
