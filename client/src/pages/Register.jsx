@@ -25,9 +25,13 @@ const Register = () => {
           noValidate
         >
           <div>
-            <label className="block mb-1 text-sm font-medium">Name</label>
+            <label htmlFor="name" className="block mb-1 text-sm font-medium">
+              Name
+            </label>
             <input
+              id="name"
               type="text"
+              autoComplete="name"
               placeholder="Enter your name"
               {...register("name")}
               className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-gray-400"
@@ -38,9 +42,13 @@ const Register = () => {
           </div>
 
           <div>
-            <label className="block mb-1 text-sm font-medium">Email</label>
+            <label htmlFor="email" className="block mb-1 text-sm font-medium">
+              Email
+            </label>
             <input
+              id="email"
               type="email"
+              autoComplete="email"
               {...register("email")}
               placeholder="Enter your email"
               className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-gray-400"
@@ -53,9 +61,16 @@ const Register = () => {
           </div>
 
           <div>
-            <label className="block mb-1 text-sm font-medium">Password</label>
+            <label
+              htmlFor="password"
+              className="block mb-1 text-sm font-medium"
+            >
+              Password
+            </label>
             <input
+              id="password"
               type="password"
+              autoComplete="new-password"
               placeholder="Create a password"
               {...register("password")}
               className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-gray-400"
@@ -71,7 +86,7 @@ const Register = () => {
             type="submit"
             className="w-full rounded-md bg-black px-4 py-2 text-white font-medium hover:bg-gray-800 transition-colors duration-300 cursor-pointer"
           >
-            Create Account
+            Register
           </button>
         </form>
       </div>
