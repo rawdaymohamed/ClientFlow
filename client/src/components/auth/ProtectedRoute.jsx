@@ -7,7 +7,9 @@ const ProtectedRoute = ({ children }) => {
     queryFn: getCurrentUser,
     retry: false,
   });
-
+  if (isLoading) {
+    return <div>Checking authentication... </div>;
+  }
   console.log({ data, isLoading, isError });
 
   return children;
