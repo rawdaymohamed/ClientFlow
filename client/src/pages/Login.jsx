@@ -8,7 +8,6 @@ import { useState } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const {
     register,
@@ -21,15 +20,13 @@ const Login = () => {
   const loginMutation = useMutation({
     mutationFn: loginUser,
     onSuccess: () => {
-      navigate("/dashboard");
-      setSuccessMessage("Login successful! Redirecting to dashboard...");
       setErrorMessage("");
+      navigate("/dashboard");
     },
     onError: (error) => {
       setErrorMessage(
         error.response?.data?.message || "Login failed. Please try again.",
       );
-      setSuccessMessage("");
     },
   });
   const onSubmit = (data) => {
@@ -40,11 +37,6 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
         <h1 className="text-2xl font-bold mb-4 text-center">Login</h1>
-        {successMessage && (
-          <p className="mb-4 rounded-md bg-green-100 px-3 py-2 text-sm text-green-700">
-            {successMessage}
-          </p>
-        )}
         {errorMessage && (
           <p className="mb-4 rounded-md bg-red-100 px-3 py-2 text-sm text-red-700">
             {errorMessage}
