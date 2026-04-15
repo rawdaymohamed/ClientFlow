@@ -4,10 +4,11 @@ import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 import PublicOnlyRoute from "../components/auth/PublicOnlyRoute";
+import HomeRedirect from "../components/auth/HomeRedirect";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <div>Home</div>,
+    element: <HomeRedirect />,
   },
   {
     path: "/login",
