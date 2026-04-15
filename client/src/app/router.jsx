@@ -3,6 +3,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
+import PublicOnlyRoute from "../components/auth/PublicOnlyRoute";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -10,11 +11,19 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <Login />,
+    element: (
+      <PublicOnlyRoute>
+        <Login />
+      </PublicOnlyRoute>
+    ),
   },
   {
     path: "/register",
-    element: <Register />,
+    element: (
+      <PublicOnlyRoute>
+        <Register />
+      </PublicOnlyRoute>
+    ),
   },
   {
     path: "/dashboard",
