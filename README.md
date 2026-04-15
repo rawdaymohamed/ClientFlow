@@ -67,8 +67,8 @@ npm install
 
 create a `.env` file in the `client` directory with the following content:
 
-```VITE_API_BASE_URL=http://localhost:5000/api
-
+```
+VITE_API_BASE_URL=http://localhost:5000/api
 ```
 
 start the frontend development server:
@@ -91,3 +91,13 @@ Open your browser and navigate to `http://localhost:5173` to access the ClientFl
 - API state management with TanStack Query
 - Clean and responsive UI with Tailwind CSS
 - Dashboard layout with navigation
+
+## Future Improvements
+
+- Add role-based access control (admin vs user)
+- Implement CRUD operations for clients and leads
+- Add search and filtering for leads
+- Improve UI with reusable components and better UX
+- Add notifications (success/error toasts)
+- Implement logout functionality and session handling
+- Deploy full stack (frontend + backend) with proper domain setup
