@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const navigate = useNavigate();
-  const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const {
     register,
@@ -20,8 +19,7 @@ const Register = () => {
 
   const registerMutation = useMutation({
     mutationFn: registerUser,
-    onSuccess: (data) => {
-      setSuccessMessage(data.message || "Registration successful");
+    onSuccess: () => {
       navigate("/dashboard");
     },
     onError: (error) => {
@@ -33,7 +31,6 @@ const Register = () => {
   });
   const onSubmit = (data) => {
     setErrorMessage("");
-    setSuccessMessage("");
     registerMutation.mutate(data);
   };
 
@@ -41,11 +38,6 @@ const Register = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
         <h1 className="text-2xl font-bold mb-4 text-center">Register</h1>
-        {successMessage && (
-          <p className="mb-4 rounded-md bg-green-100 px-3 py-2 text-sm text-green-700">
-            {successMessage}
-          </p>
-        )}
         {errorMessage && (
           <p className="mb-4 rounded-md bg-red-100 px-3 py-2 text-sm text-red-700">
             {errorMessage}
@@ -116,9 +108,10 @@ const Register = () => {
 
           <button
             type="submit"
-            className="w-full rounded-md bg-black px-4 py-2 text-white font-medium hover:bg-gray-800 transition-colors duration-300 cursor-pointer"
+            disabled={registerMutation.isPending}
+            className="w-full cursor-pointer rounded-md bg-black px-4 py-2 font-medium text-white transition-colors duration-300 hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Register
+            {registerMutation.isPending ? "Creating account..." : "Register"}
           </button>
         </form>
       </div>
