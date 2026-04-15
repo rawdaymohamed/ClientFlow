@@ -1,7 +1,13 @@
 import { useForm } from "react-hook-form";
 import { loginSchema } from "../features/auth/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { loginUser } from "../api/authApi";
+import { useState } from "react";
+
 const Login = () => {
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const {
     register,
     handleSubmit,
@@ -10,15 +16,37 @@ const Login = () => {
     resolver: zodResolver(loginSchema),
   });
 
+  const loginMutation = useMutation({
+    mutationFn: loginUser,
+    onSuccess: (data) => {
+      setSuccessMessage(data.message || "Login successful");
+      setErrorMessage("");
+    },
+    onError: (error) => {
+      setErrorMessage(
+        error.response?.data?.message || "Login failed. Please try again.",
+      );
+      setSuccessMessage("");
+    },
+  });
   const onSubmit = (data) => {
-    console.log(data);
+    loginMutation.mutate(data);
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
         <h1 className="text-2xl font-bold mb-4 text-center">Login</h1>
-
+        {successMessage && (
+          <p className="mb-4 rounded-md bg-green-100 px-3 py-2 text-sm text-green-700">
+            {successMessage}
+          </p>
+        )}
+        {errorMessage && (
+          <p className="mb-4 rounded-md bg-red-100 px-3 py-2 text-sm text-red-700">
+            {errorMessage}
+          </p>
+        )}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="space-y-4"
