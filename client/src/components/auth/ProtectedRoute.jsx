@@ -8,10 +8,12 @@ const ProtectedRoute = ({ children }) => {
     queryFn: getCurrentUser,
     retry: false,
   });
+
   if (isLoading) {
-    return <div>Checking authentication... </div>;
+    return <div>Checking authentication...</div>;
   }
-  if (isError) {
+
+  if (isError || !data?.data) {
     return <Navigate to="/login" replace />;
   }
 
