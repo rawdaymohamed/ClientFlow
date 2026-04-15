@@ -81,3 +81,22 @@ export const loginUser = async (req, res, next) => {
     next(error);
   }
 };
+
+export const logoutUser = (req, res) => {
+  res.clearCookie(COOKIE_NAME, authCookieOptions);
+
+  return res.status(200).json({
+    status: "success",
+    message: "Logged out successfully",
+  });
+};
+
+export const protectedRoute = async (req, res) => {
+  return res.status(200).json({
+    status: "success",
+    message: "You have accessed a protected route",
+    data: {
+      userId: req.user.id,
+    },
+  });
+};
