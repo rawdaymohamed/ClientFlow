@@ -1,14 +1,8 @@
 import { Navigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getCurrentUser } from "../../api/authApi";
+import useCurrentUser from "../../features/auth/hooks/useCurrentUser";
 import LoadingScreen from "../ui/LoadingScreen";
-
 const HomeRedirect = () => {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["me"],
-    queryFn: getCurrentUser,
-    retry: false,
-  });
+  const { data, isLoading, isError } = useCurrentUser();
 
   if (isLoading) {
     return <LoadingScreen message="Checking authentication..." />;
