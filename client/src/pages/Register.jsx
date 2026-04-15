@@ -15,6 +15,9 @@ const Register = () => {
 
   const registerMutation = useMutation({
     mutationFn: registerUser,
+    onSuccess: (data) => {
+      console.log("Registration successful:", data);
+    },
   });
   const onSubmit = (data) => {
     registerMutation.mutate(data);
