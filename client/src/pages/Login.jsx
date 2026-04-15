@@ -85,9 +85,10 @@ const Login = () => {
           </div>
           <button
             type="submit"
-            className="w-full rounded-md bg-black px-4 py-2 text-white font-medium hover:bg-gray-800 transition-colors duration-300 cursor-pointer"
+            disabled={loginMutation.isPending}
+            className="w-full rounded-md bg-black px-4 py-2 text-white disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Submit
+            {loginMutation.isPending ? "Logging in..." : "Login"}
           </button>
         </form>
       </div>
