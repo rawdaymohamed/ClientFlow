@@ -1,6 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { registerSchema } from "../features/auth/auth.schema";
+import { useMutation } from "@tanstack/react-query";
+import { registerUser } from "../api/authApi";
+
 const Register = () => {
   const {
     register,
@@ -10,6 +13,9 @@ const Register = () => {
     resolver: zodResolver(registerSchema),
   });
 
+  const registerMutation = useMutation({
+    mutationFn: registerUser,
+  });
   const onSubmit = (data) => {
     console.log(data);
   };
