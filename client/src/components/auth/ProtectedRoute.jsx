@@ -10,7 +10,11 @@ const ProtectedRoute = ({ children }) => {
   });
 
   if (isLoading) {
-    return <div>Checking authentication...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <p className="text-gray-600 text-sm">Checking authentication...</p>
+      </div>
+    );
   }
 
   if (isError || !data?.data) {
