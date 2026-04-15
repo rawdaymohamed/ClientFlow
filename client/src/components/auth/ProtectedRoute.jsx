@@ -1,3 +1,4 @@
+import { Navigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getCurrentUser } from "../../api/authApi";
 
@@ -10,7 +11,9 @@ const ProtectedRoute = ({ children }) => {
   if (isLoading) {
     return <div>Checking authentication... </div>;
   }
-  console.log({ data, isLoading, isError });
+  if (isError) {
+    return <Navigate to="/login" replace />;
+  }
 
   return children;
 };
