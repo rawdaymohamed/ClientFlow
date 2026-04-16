@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, NavLink } from "react-router-dom";
 import { logoutUser } from "../../api/authApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 const DashboardLayout = ({ children }) => {
@@ -23,12 +23,14 @@ const DashboardLayout = ({ children }) => {
               ClientFlow
             </Link>
             <nav className="flex items-center gap-4 text-sm text-gray-600">
-              <Link to="/dashboard" className="hover:text-black">
-                Dashboard
-              </Link>
-              <Link to="/dashboard" className="hover:text-black">
-                Leads
-              </Link>
+              <NavLink
+                to="/contacts"
+                className={({ isActive }) =>
+                  isActive ? "text-black" : "hover:text-black"
+                }
+              >
+                Contacts
+              </NavLink>
             </nav>
           </div>
           <button

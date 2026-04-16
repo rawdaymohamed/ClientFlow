@@ -5,6 +5,7 @@ import Dashboard from "../pages/Dashboard";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 import PublicOnlyRoute from "../components/auth/PublicOnlyRoute";
 import HomeRedirect from "../components/auth/HomeRedirect";
+import Contacts from "../pages/Contacts";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -31,6 +32,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Dashboard />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/contacts",
+    element: (
+      <ProtectedRoute>
+        <Contacts />
       </ProtectedRoute>
     ),
   },
