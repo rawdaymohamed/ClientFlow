@@ -4,6 +4,7 @@ import morgan from "morgan";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
+import contactRoutes from "./routes/contact.routes.js";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 
@@ -33,7 +34,7 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
-
+app.use("/api/contacts", contactRoutes);
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
     return res.status(400).json({

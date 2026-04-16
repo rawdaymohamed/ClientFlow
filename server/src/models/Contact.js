@@ -27,8 +27,14 @@ const contactSchema = new mongoose.Schema(
       type: String,
       trim: true,
       lowercase: true,
-      default: "",
-      match: [/^\S+@\S+\.\S+$/, "Please provide a valid email address"],
+      default: undefined,
+      validate: {
+        validator: function (value) {
+          if (!value) return true;
+          return /^\S+@\S+\.\S+$/.test(value);
+        },
+        message: "Please provide a valid email address",
+      },
     },
     phone: {
       type: String,
@@ -48,8 +54,15 @@ const contactSchema = new mongoose.Schema(
   },
 );
 
-contactSchema.index({ user: 1, email: 1 }, { unique: true, sparse: true });
-
+contactSchema.index(
+  { user: 1, email: 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      email: { $exists: true, $type: "string" },
+    },
+  },
+);
 const Contact = mongoose.model("Contact", contactSchema);
 
 export default Contact;
