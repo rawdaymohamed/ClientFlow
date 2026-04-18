@@ -34,3 +34,6 @@ export const createContact = async (req, res) => {
     });
   }
 };
+export const getContacts = async (req, res) => {
+  res.status(200).json({ message: "Get all contacts - To be implemented" });
+};
