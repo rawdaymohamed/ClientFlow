@@ -35,5 +35,32 @@ export const createContact = async (req, res) => {
   }
 };
 export const getContacts = async (req, res) => {
-  res.status(200).json({ message: "Get all contacts - To be implemented" });
+  try {
+    const page = Math.max(parseInt(req.query.page) || 1, 1);
+    const limit = Math.max(parseInt(req.query.limit) || 10, 1);
+    const skip = (page - 1) * limit;
+
+    const [contacts, totalContacts] = await Promise.all([
+      Contact.find({ user: req.user.id })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+      Contact.countDocuments({ user: req.user.id }),
+    ]);
+
+    return res.status(200).json({
+      message: "Contacts retrieved successfully",
+      contacts,
+      pagination: {
+        page,
+        limit,
+        totalContacts,
+        totalPages: Math.ceil(totalContacts / limit),
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Something went wrong while retrieving contacts",
+    });
+  }
 };
