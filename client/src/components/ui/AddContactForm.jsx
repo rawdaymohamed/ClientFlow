@@ -159,7 +159,7 @@ const AddContactForm = () => {
           type="button"
           onClick={() => navigate(-1)}
           disabled={isPending}
-          className="inline-flex items-center rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex items-center rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
         >
           Cancel
         </button>
@@ -167,7 +167,7 @@ const AddContactForm = () => {
         <button
           type="submit"
           disabled={isPending}
-          className="inline-flex items-center rounded-xl bg-gray-900 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-black focus:outline-none focus:ring-4 focus:ring-gray-200 disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex items-center rounded-xl bg-gray-900 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-black focus:outline-none focus:ring-4 focus:ring-gray-200 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
         >
           {isPending ? "Saving..." : "Save Contact"}
         </button>
