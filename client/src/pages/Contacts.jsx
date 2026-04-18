@@ -1,7 +1,7 @@
 import React from "react";
 import DashboardLayout from "../components/layout/DashboardLayout";
 import { Link } from "react-router-dom";
-
+import ContactList from "../components/ui/ContactList";
 const Contacts = () => {
   return (
     <DashboardLayout>
@@ -29,6 +29,7 @@ const Contacts = () => {
       >
         + Add
       </Link>
+      <ContactList />
     </DashboardLayout>
   );
 };
