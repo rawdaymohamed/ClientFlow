@@ -9,7 +9,15 @@ import { Toaster } from "react-hot-toast";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <Toaster position="top-right" />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            borderRadius: "12px",
+            fontSize: "14px",
+          },
+        }}
+      />
       <RouterProvider router={router} />
     </QueryClientProvider>
   </React.StrictMode>,
