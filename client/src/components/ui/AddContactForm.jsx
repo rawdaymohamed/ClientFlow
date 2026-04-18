@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createContact } from "../../api/contactsApi";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const inputStyles =
   "block w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 shadow-sm transition focus:border-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-100";
@@ -15,8 +16,6 @@ const errorStyles = "mt-2 text-sm text-red-600";
 const AddContactForm = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [serverError, setServerError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
 
   const {
     register,
@@ -37,39 +36,24 @@ const AddContactForm = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: createContact,
     onSuccess: () => {
-      setServerError("");
-      setSuccessMessage("Contact created successfully.");
+      toast.success("Contact created successfully");
+      navigate("/contacts");
       reset();
       queryClient.invalidateQueries({ queryKey: ["contacts"] });
     },
     onError: (error) => {
-      setSuccessMessage("");
-      setServerError(
+      toast.error(
         error?.response?.data?.message || "Failed to create contact.",
       );
     },
   });
 
   const onSubmit = (data) => {
-    setServerError("");
-    setSuccessMessage("");
     mutate(data);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      {successMessage && (
-        <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
-          {successMessage}
-        </div>
-      )}
-
-      {serverError && (
-        <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-          {serverError}
-        </div>
-      )}
-
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <div>
           <label htmlFor="firstName" className={labelStyles}>
