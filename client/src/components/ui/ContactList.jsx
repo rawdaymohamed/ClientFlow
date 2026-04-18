@@ -4,7 +4,7 @@ import { getContacts } from "../../api/contactsApi";
 
 const ContactList = () => {
   const [page, setPage] = useState(1);
-  const limit = 3;
+  const limit = 5;
 
   const { data, isLoading, isError, error, isFetching } = useQuery({
     queryKey: ["contacts", page],
