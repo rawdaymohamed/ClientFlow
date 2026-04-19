@@ -64,3 +64,44 @@ export const getContacts = async (req, res) => {
     });
   }
 };
+export const updateContact = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { firstName, lastName, email, phone, company } = req.body;
+
+    const normalizedEmail = email?.trim()
+      ? email.trim().toLowerCase()
+      : undefined;
+
+    const contact = await Contact.findOneAndUpdate(
+      { _id: id, user: req.user.id },
+      { firstName, lastName, email: normalizedEmail, phone, company },
+      { new: true, runValidators: true },
+    );
+
+    if (!contact) {
+      return res.status(404).json({
+        message: "Contact not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Contact updated successfully",
+      contact,
+    });
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({
+        message: "A contact with this email already exists",
+      });
+    }
+    if (error.name === "CastError") {
+      return res.status(400).json({
+        message: "Invalid contact id",
+      });
+    }
+    return res.status(500).json({
+      message: "Something went wrong while updating contact",
+    });
+  }
+};
