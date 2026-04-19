@@ -105,3 +105,30 @@ export const updateContact = async (req, res) => {
     });
   }
 };
+export const getContactById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const contact = await Contact.findOne({ _id: id, user: req.user.id });
+
+    if (!contact) {
+      return res.status(404).json({
+        message: "Contact not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Contact retrieved successfully",
+      contact,
+    });
+  } catch (error) {
+    if (error.name === "CastError") {
+      return res.status(400).json({
+        message: "Invalid contact id",
+      });
+    }
+    return res.status(500).json({
+      message: "Something went wrong while retrieving contact",
+    });
+  }
+};
