@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getContacts } from "../../api/contactsApi";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { deleteContact, getContacts } from "../../api/contactsApi";
 
 const ContactList = () => {
   const [page, setPage] = useState(1);
   const limit = 5;
+  const queryClient = useQueryClient();
 
   const { data, isLoading, isError, error, isFetching } = useQuery({
     queryKey: ["contacts", page],
@@ -13,8 +15,33 @@ const ContactList = () => {
     placeholderData: (previousData) => previousData,
   });
 
-  const contacts = data?.contacts || [];
+  const { mutate: removeContact, isPending: isDeleting } = useMutation({
+    mutationFn: deleteContact,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["contacts"] });
+      toast.success("Contact deleted successfully");
+    },
+    onError: (error) => {
+      toast.error(
+        error?.response?.data?.message || "Failed to delete contact.",
+      );
+    },
+  });
+
+  const contacts = data?.contacts ?? [];
   const pagination = data?.pagination;
+
+  const handleDelete = (contactId) => {
+    removeContact(contactId);
+  };
+
+  const handlePreviousPage = () => {
+    setPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setPage((prev) => prev + 1);
+  };
 
   if (isLoading) {
     return (
@@ -46,13 +73,13 @@ const ContactList = () => {
   }
 
   return (
-    <div className="space-y-4  pb-20 sm:pb-0">
+    <div className="space-y-4 pb-20 sm:pb-0">
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
         <ul className="divide-y divide-gray-200">
           {contacts.map((contact) => (
             <li
               key={contact._id}
-              className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between"
+              className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between"
             >
               <div className="flex-1">
                 <h3 className="text-base font-semibold text-gray-900">
@@ -66,13 +93,22 @@ const ContactList = () => {
                 </div>
               </div>
 
-              <div className="flex items-center sm:justify-end">
+              <div className="flex items-center gap-2 sm:justify-end">
                 <Link
                   to={`/contacts/${contact._id}/edit`}
                   className="inline-flex items-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
                 >
                   Edit
                 </Link>
+
+                <button
+                  type="button"
+                  onClick={() => handleDelete(contact._id)}
+                  disabled={isDeleting}
+                  className="inline-flex items-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isDeleting ? "Deleting..." : "Delete"}
+                </button>
               </div>
             </li>
           ))}
@@ -88,7 +124,7 @@ const ContactList = () => {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+            onClick={handlePreviousPage}
             disabled={page === 1 || isFetching}
             className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
@@ -97,10 +133,10 @@ const ContactList = () => {
 
           <button
             type="button"
-            onClick={() => setPage((prev) => prev + 1)}
+            onClick={handleNextPage}
             disabled={
               pagination
-                ? page >= pagination.totalPages
+                ? page >= pagination.totalPages || isFetching
                 : contacts.length < limit || isFetching
             }
             className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
