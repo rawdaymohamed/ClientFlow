@@ -7,6 +7,7 @@ import PublicOnlyRoute from "../components/auth/PublicOnlyRoute";
 import HomeRedirect from "../components/auth/HomeRedirect";
 import Contacts from "../pages/Contacts";
 import AddContact from "../pages/AddContact";
+import EditContact from "../pages/EditContact";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -49,6 +50,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <AddContact />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/contacts/:id/edit",
+    element: (
+      <ProtectedRoute>
+        <EditContact />
       </ProtectedRoute>
     ),
   },

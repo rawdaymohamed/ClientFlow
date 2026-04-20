@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getContacts } from "../../api/contactsApi";
+import { Link } from "react-router-dom";
 
 const ContactList = () => {
   const [page, setPage] = useState(1);
@@ -53,7 +54,7 @@ const ContactList = () => {
               key={contact._id}
               className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between"
             >
-              <div>
+              <div className="flex-1">
                 <h3 className="text-base font-semibold text-gray-900">
                   {contact.firstName} {contact.lastName}
                 </h3>
@@ -63,6 +64,15 @@ const ContactList = () => {
                   <span>{contact.phone || "No phone provided"}</span>
                   <span>{contact.company || "No company provided"}</span>
                 </div>
+              </div>
+
+              <div className="flex items-center sm:justify-end">
+                <Link
+                  to={`/contacts/${contact._id}/edit`}
+                  className="inline-flex items-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                >
+                  Edit
+                </Link>
               </div>
             </li>
           ))}
