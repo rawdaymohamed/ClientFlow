@@ -3,12 +3,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { deleteContact, getContacts } from "../../api/contactsApi";
+import ConfirmModal from "./ContactModal";
 
 const ContactList = () => {
   const [page, setPage] = useState(1);
+  const [contactToDelete, setContactToDelete] = useState(null);
   const limit = 5;
   const queryClient = useQueryClient();
-
   const { data, isLoading, isError, error, isFetching } = useQuery({
     queryKey: ["contacts", page],
     queryFn: () => getContacts({ page, limit }),
@@ -34,7 +35,12 @@ const ContactList = () => {
   const handleDelete = (contactId) => {
     removeContact(contactId);
   };
+  const confirmDelete = () => {
+    if (!contactToDelete) return;
 
+    removeContact(contactToDelete._id);
+    setContactToDelete(null);
+  };
   const handlePreviousPage = () => {
     setPage((prev) => Math.max(prev - 1, 1));
   };
@@ -103,9 +109,9 @@ const ContactList = () => {
 
                 <button
                   type="button"
-                  onClick={() => handleDelete(contact._id)}
+                  onClick={() => setContactToDelete(contact)}
                   disabled={isDeleting}
-                  className="inline-flex items-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex items-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                 >
                   {isDeleting ? "Deleting..." : "Delete"}
                 </button>
@@ -145,6 +151,20 @@ const ContactList = () => {
           </button>
         </div>
       </div>
+      <ConfirmModal
+        isOpen={!!contactToDelete}
+        title="Delete contact"
+        description={
+          contactToDelete
+            ? `Are you sure you want to delete ${contactToDelete.firstName} ${contactToDelete.lastName}?`
+            : ""
+        }
+        confirmText="Delete"
+        cancelText="Cancel"
+        isLoading={isDeleting}
+        onCancel={() => setContactToDelete(null)}
+        onConfirm={confirmDelete}
+      />
     </div>
   );
 };
