@@ -8,6 +8,7 @@ import ConfirmModal from "./ContactModal";
 const ContactList = ({ searchTerm = "" }) => {
   const [page, setPage] = useState(1);
   const [contactToDelete, setContactToDelete] = useState(null);
+  const [deletingContactId, setDeletingContactId] = useState(null);
   const limit = 5;
   const queryClient = useQueryClient();
 
@@ -23,11 +24,13 @@ const ContactList = ({ searchTerm = "" }) => {
       queryClient.invalidateQueries({ queryKey: ["contacts"] });
       queryClient.invalidateQueries({ queryKey: ["contacts-metric"] });
       toast.success("Contact deleted successfully");
+      setDeletingContactId(null);
     },
     onError: (error) => {
       toast.error(
         error?.response?.data?.message || "Failed to delete contact.",
       );
+      setDeletingContactId(null);
     },
   });
 
@@ -48,10 +51,11 @@ const ContactList = ({ searchTerm = "" }) => {
 
   const confirmDelete = () => {
     if (!contactToDelete) return;
+
+    setDeletingContactId(contactToDelete._id);
     removeContact(contactToDelete._id);
     setContactToDelete(null);
   };
-
   const handlePreviousPage = () => {
     setPage((prev) => Math.max(prev - 1, 1));
   };
@@ -134,10 +138,10 @@ const ContactList = ({ searchTerm = "" }) => {
                 <button
                   type="button"
                   onClick={() => setContactToDelete(contact)}
-                  disabled={isDeleting}
+                  disabled={deletingContactId === contact._id}
                   className="inline-flex cursor-pointer items-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  {isDeleting ? "Deleting..." : "Delete"}
+                  {deletingContactId === contact._id ? "Deleting..." : "Delete"}
                 </button>
               </div>
             </li>
@@ -188,7 +192,7 @@ const ContactList = ({ searchTerm = "" }) => {
         }
         confirmText="Delete"
         cancelText="Cancel"
-        isLoading={isDeleting}
+        isLoading={!!deletingContactId}
         onCancel={() => setContactToDelete(null)}
         onConfirm={confirmDelete}
       />
