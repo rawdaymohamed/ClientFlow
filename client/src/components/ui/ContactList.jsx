@@ -5,11 +5,12 @@ import toast from "react-hot-toast";
 import { deleteContact, getContacts } from "../../api/contactsApi";
 import ConfirmModal from "./ContactModal";
 
-const ContactList = () => {
+const ContactList = ({ searchTerm = "" }) => {
   const [page, setPage] = useState(1);
   const [contactToDelete, setContactToDelete] = useState(null);
   const limit = 5;
   const queryClient = useQueryClient();
+
   const { data, isLoading, isError, error, isFetching } = useQuery({
     queryKey: ["contacts", page],
     queryFn: () => getContacts({ page, limit }),
@@ -32,15 +33,24 @@ const ContactList = () => {
   const contacts = data?.contacts ?? [];
   const pagination = data?.pagination;
 
-  const handleDelete = (contactId) => {
-    removeContact(contactId);
-  };
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+
+  const filteredContacts = contacts.filter((contact) => {
+    const fullName =
+      `${contact.firstName || ""} ${contact.lastName || ""}`.toLowerCase();
+    const email = (contact.email || "").toLowerCase();
+
+    return (
+      fullName.includes(normalizedSearch) || email.includes(normalizedSearch)
+    );
+  });
+
   const confirmDelete = () => {
     if (!contactToDelete) return;
-
     removeContact(contactToDelete._id);
     setContactToDelete(null);
   };
+
   const handlePreviousPage = () => {
     setPage((prev) => Math.max(prev - 1, 1));
   };
@@ -78,11 +88,24 @@ const ContactList = () => {
     );
   }
 
+  if (filteredContacts.length === 0) {
+    return (
+      <div className="rounded-xl border border-dashed border-gray-300 bg-white p-10 text-center shadow-sm">
+        <h3 className="text-lg font-semibold text-gray-900">
+          No matching contacts
+        </h3>
+        <p className="mt-2 text-sm text-gray-500">
+          Try searching by another name or email.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4 pb-20 sm:pb-0">
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
         <ul className="divide-y divide-gray-200">
-          {contacts.map((contact) => (
+          {filteredContacts.map((contact) => (
             <li
               key={contact._id}
               className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between"
@@ -111,7 +134,7 @@ const ContactList = () => {
                   type="button"
                   onClick={() => setContactToDelete(contact)}
                   disabled={isDeleting}
-                  className="inline-flex items-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                  className="inline-flex cursor-pointer items-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {isDeleting ? "Deleting..." : "Delete"}
                 </button>
@@ -121,36 +144,39 @@ const ContactList = () => {
         </ul>
       </div>
 
-      <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm">
-        <div className="text-sm text-gray-500">
-          Page {pagination?.page || page}
-          {pagination?.totalPages ? ` of ${pagination.totalPages}` : ""}
-        </div>
+      {!normalizedSearch && (
+        <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm">
+          <div className="text-sm text-gray-500">
+            Page {pagination?.page || page}
+            {pagination?.totalPages ? ` of ${pagination.totalPages}` : ""}
+          </div>
 
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={handlePreviousPage}
-            disabled={page === 1 || isFetching}
-            className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            Previous
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handlePreviousPage}
+              disabled={page === 1 || isFetching}
+              className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Previous
+            </button>
 
-          <button
-            type="button"
-            onClick={handleNextPage}
-            disabled={
-              pagination
-                ? page >= pagination.totalPages || isFetching
-                : contacts.length < limit || isFetching
-            }
-            className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            Next
-          </button>
+            <button
+              type="button"
+              onClick={handleNextPage}
+              disabled={
+                pagination
+                  ? page >= pagination.totalPages || isFetching
+                  : contacts.length < limit || isFetching
+              }
+              className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         </div>
-      </div>
+      )}
+
       <ConfirmModal
         isOpen={!!contactToDelete}
         title="Delete contact"
