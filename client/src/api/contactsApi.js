@@ -22,3 +22,13 @@ export const deleteContact = async (id) => {
   const response = await api.delete(`/contacts/${id}`);
   return response.data;
 };
+// New helper
+export const getContactsMetric = async () => {
+  const response = await api.get("/contacts", {
+    params: { page: 1, limit: 1 },
+  });
+
+  return {
+    totalContacts: response.data?.pagination?.totalContacts || 0,
+  };
+};

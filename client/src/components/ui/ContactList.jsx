@@ -21,6 +21,7 @@ const ContactList = ({ searchTerm = "" }) => {
     mutationFn: deleteContact,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["contacts"] });
+      queryClient.invalidateQueries({ queryKey: ["contacts-metric"] });
       toast.success("Contact deleted successfully");
     },
     onError: (error) => {

@@ -14,6 +14,7 @@ const AddContactForm = () => {
     onSuccess: () => {
       toast.success("Contact created successfully");
       queryClient.invalidateQueries({ queryKey: ["contacts"] });
+      queryClient.invalidateQueries({ queryKey: ["contacts-metric"] });
       navigate("/contacts");
     },
     onError: (error) => {
