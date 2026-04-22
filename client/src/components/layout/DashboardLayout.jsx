@@ -17,7 +17,7 @@ const DashboardLayout = ({ children }) => {
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <div className="flex items-center gap-6">
             <Link
-              to="/dashboard"
+              to="/contacts"
               className="text-lg font-semibold text-gray-800"
             >
               ClientFlow

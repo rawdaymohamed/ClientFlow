@@ -8,6 +8,7 @@ import HomeRedirect from "../components/auth/HomeRedirect";
 import Contacts from "../pages/Contacts";
 import AddContact from "../pages/AddContact";
 import EditContact from "../pages/EditContact";
+import NotFound from "../pages/NotFound";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -27,14 +28,6 @@ const router = createBrowserRouter([
       <PublicOnlyRoute>
         <Register />
       </PublicOnlyRoute>
-    ),
-  },
-  {
-    path: "/dashboard",
-    element: (
-      <ProtectedRoute>
-        <Dashboard />
-      </ProtectedRoute>
     ),
   },
   {
@@ -60,6 +53,12 @@ const router = createBrowserRouter([
         <EditContact />
       </ProtectedRoute>
     ),
+  },
+
+  // 👇 ADD THIS
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 

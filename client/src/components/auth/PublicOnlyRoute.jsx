@@ -10,7 +10,7 @@ const PublicOnlyRoute = ({ children }) => {
   }
 
   if (!isError && data?.data) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/contacts" replace />;
   }
 
   return children;
