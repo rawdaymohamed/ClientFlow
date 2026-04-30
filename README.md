@@ -1,8 +1,38 @@
 # ClientFlow CRM
 
-A full-stack CRM application built with the MERN stack to manage clients, leads, and workflows efficiently.
+A full-stack CRM application built with the MERN stack to manage clients, and workflows efficiently.
 
 This project focuses on clean architecture, authentication, and scalable frontend/backend structure using modern tools.
+
+## 🎥 Demo Video
+
+[![Watch the demo](https://img.youtube.com/vi/jJsUrUND8RI/0.jpg)](https://youtu.be/jJsUrUND8RI)
+
+## 📸 Screenshots
+
+### Signin
+
+![Signin](./demo/signin.png)
+
+### Register
+
+![Register](./demo/register.png)
+
+### Dashboard
+
+![Dashboard](./demo/contacts-dashboard.png)
+
+### Empty State
+
+![Empty](./demo/empty-dashboard.png)
+
+### New Client
+
+![New Client](./demo/new-client.png)
+
+### Contact Search (Mobile)
+
+![Search](./demo/contact-search-screen-mobile.png)
 
 ## Tech Stack
 
